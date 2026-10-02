@@ -9,22 +9,52 @@ body {
 }
 
 body {
-  background: #fff;
-  color: #171717;
+  background: #f5f8f6;
+  color: #152c2a;
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.starter {
+.page {
   display: grid;
-  min-height: 100vh;
+  min-height: 100svh;
   place-items: center;
-  padding: 2rem;
+  padding: 2rem 1.5rem;
 }
 
-.starter h1 {
-  margin: 0;
-  font-size: clamp(1.5rem, 4vw, 2.25rem);
-  font-weight: 500;
-  letter-spacing: -0.04em;
+.content {
+  width: min(100%, 44rem);
   text-align: center;
+}
+
+.content h1 {
+  margin: 0;
+  color: #153c36;
+  font-size: clamp(3.5rem, 10vw, 6rem);
+  font-weight: 700;
+  letter-spacing: -0.075em;
+  line-height: 1;
+}
+
+.tagline {
+  margin: 1.5rem 0 0;
+  color: #287360;
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  font-weight: 600;
+  letter-spacing: 0.015em;
+}
+
+.description {
+  max-width: 31rem;
+  margin: 2rem auto 0;
+  color: #536560;
+  font-size: clamp(1rem, 2.2vw, 1.125rem);
+  line-height: 1.7;
+}
+
+.status {
+  margin: 3rem 0 0;
+  color: #627d74;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
 }
