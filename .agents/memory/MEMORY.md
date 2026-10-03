@@ -1,1 +1,2 @@
 - [CampusFlow signup policy](campusflow-signup-policy.md) — preserve email-confirmed, student-only signup and map profiles to Supabase Auth identities.
+- [Next.js dev-cache safety](nextjs-dev-cache-safety.md) — stop the dev server before clearing `.next/dev`; live deletion can panic Turbopack and leave port 3000 occupied.
