@@ -11,8 +11,10 @@ type SessionUser = {
 
 export default function AuthStatusPage() {
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [user, setUser] = useState<SessionUser | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [logoutError, setLogoutError] = useState<string | null>(null);
 
   useEffect(() => {
     let isCurrent = true;
@@ -55,6 +57,29 @@ export default function AuthStatusPage() {
     };
   }, []);
 
+  async function handleLogout() {
+    setIsLoggingOut(true);
+    setLogoutError(null);
+
+    try {
+      const { error: signOutError } = await supabase.auth.signOut();
+
+      if (signOutError) {
+        throw signOutError;
+      }
+
+      setUser(null);
+    } catch (caughtError) {
+      setLogoutError(
+        caughtError instanceof Error
+          ? caughtError.message
+          : "Unable to log out.",
+      );
+    } finally {
+      setIsLoggingOut(false);
+    }
+  }
+
   return (
     <main>
       <h1>Authentication status</h1>
@@ -68,6 +93,14 @@ export default function AuthStatusPage() {
           <p>Session active</p>
           <p>Email: {user.email ?? "Not available"}</p>
           <p>UUID: {user.id}</p>
+          {logoutError && <p role="alert">{logoutError}</p>}
+          <button
+            type="button"
+            onClick={handleLogout}
+            disabled={isLoggingOut}
+          >
+            {isLoggingOut ? "Logging out..." : "Log out"}
+          </button>
         </>
       ) : (
         <p>No active session</p>
