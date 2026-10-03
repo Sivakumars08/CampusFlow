@@ -1,0 +1,1 @@
+- [CampusFlow signup policy](campusflow-signup-policy.md) — preserve email-confirmed, student-only signup and map profiles to Supabase Auth identities.
