@@ -71,6 +71,19 @@ export default function DashboardPage() {
       <p>Role: {profile?.role}</p>
       <p>College: {college?.name}</p>
       <p>College Code: {college?.code}</p>
+
+      <h2>Student Services</h2>
+
+      <button onClick={() => router.push("/request/new")}>
+        Submit a Request
+      </button>
+
+      <br />
+      <br />
+
+      <button onClick={() => router.push("/my-requests")}>
+        My Requests
+      </button>
     </main>
   );
 }
