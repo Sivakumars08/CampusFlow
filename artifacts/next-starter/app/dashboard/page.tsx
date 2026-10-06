@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getCurrentUserProfile } from "@/lib/auth";
+import { supabase } from "@/lib/supabase";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -59,6 +60,11 @@ export default function DashboardPage() {
     return <main>Unable to load dashboard: {error}</main>;
   }
 
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    router.replace("/login");
+  }
+
   return (
     <main>
       <h1>CampusFlow Dashboard</h1>
@@ -84,6 +90,11 @@ export default function DashboardPage() {
       <button onClick={() => router.push("/my-requests")}>
         My Requests
       </button>
+
+      <br />
+      <br />
+
+      <button onClick={handleLogout}>Logout</button>
     </main>
   );
 }
