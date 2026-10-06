@@ -121,7 +121,12 @@ export default function RequestDetailsPage() {
       <h2>{request.title}</h2>
 
       <h3>Status</h3>
-      <p>● {request.status.replace("_", " ")}</p>
+      <p>
+        ●{" "}
+        {request.status
+          .replace(/_/g, " ")
+          .replace(/\b\w/g, (character) => character.toUpperCase())}
+      </p>
 
       <h3>Description</h3>
       <p>{request.description}</p>
