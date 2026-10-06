@@ -91,6 +91,10 @@ export default function MyRequestsPage() {
                 Submitted:{" "}
                 {new Date(request.created_at).toLocaleString()}
               </p>
+
+              <button onClick={() => router.push(`/request/${request.id}`)}>
+                View Details
+              </button>
             </article>
           ))}
         </section>
