@@ -32,14 +32,14 @@ export default function RequestDetailsPage() {
         error: userError,
       } = await supabase.auth.getUser();
 
-      if (userError) {
-        setError(userError.message);
-        setLoading(false);
+      if (!user) {
+        router.replace("/login");
         return;
       }
 
-      if (!user) {
-        router.replace("/login");
+      if (userError) {
+        setError(userError.message);
+        setLoading(false);
         return;
       }
 
