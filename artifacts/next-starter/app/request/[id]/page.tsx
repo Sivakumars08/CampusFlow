@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
 type RequestDetails = {
@@ -93,9 +94,7 @@ export default function RequestDetailsPage() {
           This request may not exist or you may not have permission to view it.
         </p>
 
-        <button onClick={() => router.push("/my-requests")}>
-          Back to My Requests
-        </button>
+        <Link href="/my-requests">Back to My Requests</Link>
       </main>
     );
   }
@@ -106,9 +105,7 @@ export default function RequestDetailsPage() {
         <h1>Unable to load request</h1>
         <p>{error}</p>
 
-        <button onClick={() => router.push("/my-requests")}>
-          Back to My Requests
-        </button>
+        <Link href="/my-requests">Back to My Requests</Link>
       </main>
     );
   }
@@ -119,9 +116,7 @@ export default function RequestDetailsPage() {
 
   return (
     <main>
-      <button onClick={() => router.push("/my-requests")}>
-        ← Back to My Requests
-      </button>
+      <Link href="/my-requests">← Back to My Requests</Link>
 
       <h1>Request Details</h1>
 
