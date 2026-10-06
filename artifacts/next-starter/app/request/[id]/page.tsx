@@ -116,8 +116,6 @@ export default function RequestDetailsPage() {
 
   return (
     <main>
-      <Link href="/my-requests">← Back to My Requests</Link>
-
       <h1>Request Details</h1>
 
       <h2>{request.title}</h2>
@@ -143,6 +141,8 @@ export default function RequestDetailsPage() {
       <p>
         Last Updated: {new Date(request.updated_at).toLocaleString()}
       </p>
+
+      <Link href="/my-requests">← Back to My Requests</Link>
     </main>
   );
 }
