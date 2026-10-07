@@ -130,7 +130,7 @@ export default function StaffPage() {
               <p>Submitted: {formatDate(request.created_at)}</p>
 
               <button
-                onClick={() => router.push(`/request/${request.id}`)}
+                onClick={() => router.push(`/staff/request/${request.id}`)}
               >
                 View Request
               </button>
