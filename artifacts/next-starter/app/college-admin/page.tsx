@@ -30,6 +30,13 @@ export default function CollegeAdminPage() {
   const [error, setError] = useState("");
   const [requests, setRequests] = useState<CollegeRequest[]>([]);
   const [staff, setStaff] = useState<StaffProfile[]>([]);
+  const [selectedStaff, setSelectedStaff] = useState<Record<string, string>>(
+    {},
+  );
+  const [assigningRequestId, setAssigningRequestId] = useState<string | null>(
+    null,
+  );
+  const [actionError, setActionError] = useState<Record<string, string>>({});
 
   useEffect(() => {
     let isCurrent = true;
@@ -64,6 +71,7 @@ export default function CollegeAdminPage() {
         }
 
         const collegeId = result.profile.college_id;
+
         const [requestResult, staffResult] = await Promise.all([
           supabase
             .from("requests")
@@ -105,6 +113,53 @@ export default function CollegeAdminPage() {
     };
   }, [router]);
 
+  async function handleAssign(requestId: string) {
+    const staffId = selectedStaff[requestId];
+
+    if (!staffId) {
+      setActionError((current) => ({
+        ...current,
+        [requestId]: "Select a staff member before assigning.",
+      }));
+      return;
+    }
+
+    setAssigningRequestId(requestId);
+    setActionError((current) => ({
+      ...current,
+      [requestId]: "",
+    }));
+
+    const { data, error: updateError } = await supabase
+      .from("requests")
+      .update({
+        assigned_to: staffId,
+        status: "assigned",
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", requestId)
+      .select(
+        "id, title, category, location, priority, status, assigned_to, created_at",
+      )
+      .single();
+
+    if (updateError) {
+      setActionError((current) => ({
+        ...current,
+        [requestId]: updateError.message,
+      }));
+      setAssigningRequestId(null);
+      return;
+    }
+
+    setRequests((current) =>
+      current.map((request) =>
+        request.id === requestId ? data : request,
+      ),
+    );
+    setAssigningRequestId(null);
+  }
+
   const mainStyle = {
     maxWidth: "48rem",
     margin: "0 auto",
@@ -145,6 +200,9 @@ export default function CollegeAdminPage() {
                     (staffMember) => staffMember.id === request.assigned_to,
                   )?.full_name?.trim() || "Assigned staff unavailable";
 
+            const isUnassigned =
+              request.status === "submitted" && request.assigned_to === null;
+
             return (
               <article
                 key={request.id}
@@ -162,6 +220,50 @@ export default function CollegeAdminPage() {
                 <p>Status: {request.status}</p>
                 <p>Assigned staff: {assignedStaffName}</p>
                 <p>Submitted: {new Date(request.created_at).toLocaleString()}</p>
+
+                {isUnassigned && (
+                  <div>
+                    <label htmlFor={`staff-${request.id}`}>
+                      Assign to staff
+                    </label>
+                    <br />
+                    <select
+                      id={`staff-${request.id}`}
+                      value={selectedStaff[request.id] ?? ""}
+                      onChange={(event) =>
+                        setSelectedStaff((current) => ({
+                          ...current,
+                          [request.id]: event.target.value,
+                        }))
+                      }
+                      disabled={assigningRequestId === request.id}
+                    >
+                      <option value="">Select staff member</option>
+                      {staff.map((staffMember) => (
+                        <option key={staffMember.id} value={staffMember.id}>
+                          {staffMember.full_name?.trim() || "Unnamed staff"}
+                        </option>
+                      ))}
+                    </select>
+
+                    <br />
+                    <br />
+
+                    <button
+                      type="button"
+                      onClick={() => handleAssign(request.id)}
+                      disabled={assigningRequestId === request.id}
+                    >
+                      {assigningRequestId === request.id
+                        ? "Assigning..."
+                        : "Assign"}
+                    </button>
+
+                    {actionError[request.id] && (
+                      <p role="alert">{actionError[request.id]}</p>
+                    )}
+                  </div>
+                )}
               </article>
             );
           })}
